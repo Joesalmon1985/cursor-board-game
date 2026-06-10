@@ -3,6 +3,8 @@ extends RefCounted
 
 var seed: int = 0
 var turn_number: int = 0
+var round_number: int = 1
+var active_player_index: int = 0
 var rng: GameRng = GameRng.new()
 var board: HexBoard
 var action_space: ActionSpace
