@@ -14,6 +14,7 @@ func _init() -> void:
 		TestBotPolicy,
 		TestBotSimulation,
 		TestEventLog,
+		TestDebugController,
 	]
 	var test_assert := TestAssert.new()
 	for module in test_modules:

@@ -11,5 +11,6 @@ config_version=5
 [application]
 
 config/name="CursorBoardGame"
+run/main_scene="res://ui/debug/debug_game_overlay.tscn"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
