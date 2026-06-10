@@ -10,6 +10,7 @@ func _init() -> void:
 		TestActionSpace,
 		TestTurnOrder,
 		TestLegalActions,
+		TestActionApplication,
 	]
 	var test_assert := TestAssert.new()
 	for module in test_modules:

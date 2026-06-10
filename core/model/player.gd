@@ -19,3 +19,8 @@ func get_resource(resource: ResourceType.Type) -> int:
 
 func add_resource(resource: ResourceType.Type, amount: int) -> void:
 	resources[resource] = get_resource(resource) + amount
+
+
+func pay_cost(costs: Dictionary) -> void:
+	for resource in costs.keys():
+		resources[resource] = get_resource(resource) - costs[resource]

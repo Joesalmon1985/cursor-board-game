@@ -3,8 +3,16 @@ extends RefCounted
 
 static func resolve_start_of_turn_production(state: GameState) -> Array:
 	state.turn_number += 1
+	return _resolve_production(state, state.turn_number)
+
+
+static func resolve_round_production(state: GameState) -> Array:
+	return _resolve_production(state, state.round_number)
+
+
+static func _resolve_production(state: GameState, event_turn: int) -> Array:
 	var events: Array = []
-	var turn := state.turn_number
+	var turn := event_turn
 
 	for coord in state.board.get_all_coords_sorted():
 		var tile := state.board.get_tile(coord)
