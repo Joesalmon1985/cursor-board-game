@@ -11,6 +11,7 @@ const CATEGORY_DEBUG := "debug"
 static func all_modules() -> Array:
 	return [
 		{"category": CATEGORY_UNIT, "name": "TestBoardGeneration", "module": TestBoardGeneration},
+		{"category": CATEGORY_UNIT, "name": "TestProductionChance", "module": TestProductionChance},
 		{"category": CATEGORY_UNIT, "name": "TestVertexTopology", "module": TestVertexTopology},
 		{"category": CATEGORY_INTEGRATION, "name": "TestProduction", "module": TestProduction},
 		{"category": CATEGORY_DETERMINISM, "name": "TestDeterminism", "module": TestDeterminism},

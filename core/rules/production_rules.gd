@@ -17,17 +17,17 @@ static func _resolve_production(state: GameState, event_turn: int) -> Array:
 	for coord in state.board.get_all_coords_sorted():
 		var tile := state.board.get_tile(coord)
 		for resource in ResourceType.all():
-			var threshold: float = tile.get_production(resource)
-			if threshold <= 0.0:
+			var production_chance: int = tile.get_production_chance(resource)
+			if production_chance <= 0:
 				continue
 
-			var roll := state.rng.randf()
-			var produced := roll >= threshold
+			var roll := _roll_production_d10(state.rng)
+			var produced := roll < production_chance
 			events.append(ProductionCheckEvent.new(
 				turn,
 				coord,
 				resource,
-				threshold,
+				production_chance,
 				roll,
 				produced
 			))
@@ -56,6 +56,12 @@ static func _resolve_production(state: GameState, event_turn: int) -> Array:
 				))
 
 	return events
+
+
+static func _roll_production_d10(rng: GameRng) -> int:
+	if rng.fixed_rolls_remaining() > 0:
+		return rng.roll_d10()
+	return rng.randi_range(0, 9)
 
 
 static func _get_player(state: GameState, player_id: int) -> Player:

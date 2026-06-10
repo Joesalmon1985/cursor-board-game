@@ -10,7 +10,7 @@ static func generate(rng: GameRng, board_radius: int = DEFAULT_RADIUS) -> HexBoa
 	for coord in HexBoard.coords_for_radius(board_radius):
 		var tile := HexTile.new(coord)
 		for resource in ResourceType.all():
-			tile.production[resource] = rng.rand_range(0.0, 0.9)
+			tile.production[resource] = rng.randi_range(0, 9)
 		board.add_tile(tile)
 
 	board.build_vertex_index()

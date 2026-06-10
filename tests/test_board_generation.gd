@@ -19,8 +19,8 @@ static func run(test_assert: TestAssert) -> void:
 	for coord in coords:
 		var tile := board.get_tile(coord)
 		for resource in ResourceType.all():
-			var value: float = tile.get_production(resource)
-			test_assert.check(value >= 0.0 and value <= 0.9, "production threshold out of range")
+			var value: int = tile.get_production_chance(resource)
+			test_assert.check(value >= 0 and value <= 9, "production chance out of range")
 
 	var rng_repeat := GameRng.new()
 	rng_repeat.seed(7)
@@ -30,7 +30,7 @@ static func run(test_assert: TestAssert) -> void:
 		var tile_b := board_repeat.get_tile(coord)
 		for resource in ResourceType.all():
 			test_assert.eq(
-				tile_a.get_production(resource),
-				tile_b.get_production(resource),
-				"same seed should produce same thresholds"
+				tile_a.get_production_chance(resource),
+				tile_b.get_production_chance(resource),
+				"same seed should produce same production chances"
 			)

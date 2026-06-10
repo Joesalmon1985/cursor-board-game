@@ -4,6 +4,7 @@ extends RefCounted
 static func create_game(game_seed: int) -> GameState:
 	var state := GameState.new()
 	state.seed = game_seed
+	state.rng = GameRng.new()
 	state.rng.seed(game_seed)
 	state.board = BoardGenerator.generate(state.rng)
 	state.action_space = ActionSpace.from_board(state.board)
