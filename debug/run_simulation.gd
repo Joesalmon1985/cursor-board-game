@@ -10,9 +10,8 @@ func _init() -> void:
 	var game_seed: int = parsed["seed"]
 	var rounds: int = parsed["rounds"]
 
-	var state := TestScenario.build_standard_game(game_seed)
-	var events := TestScenario.run_production_rounds(state, rounds)
-	var snapshot := GameSnapshot.snapshot(state, events)
+	var result := GameSimulator.run(game_seed, rounds)
+	var snapshot: Dictionary = result["snapshot"]
 	print(JSON.stringify(snapshot))
 	quit(0)
 

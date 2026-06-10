@@ -12,6 +12,7 @@ func _init() -> void:
 		TestLegalActions,
 		TestActionApplication,
 		TestBotPolicy,
+		TestBotSimulation,
 	]
 	var test_assert := TestAssert.new()
 	for module in test_modules:
