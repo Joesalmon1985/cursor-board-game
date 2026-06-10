@@ -31,3 +31,21 @@ static func run(test_assert: TestAssert) -> void:
 	var first := JSON.stringify(sim_log.to_dict())
 	var second := JSON.stringify(GameSimulator.run(42, 2)["event_log"].to_dict())
 	test_assert.eq(first, second, "event log should be deterministic")
+
+	_assert_sequence_ids_match_indices(test_assert, sim_log)
+
+
+static func _assert_sequence_ids_match_indices(test_assert: TestAssert, log: EventLog) -> void:
+	for i in range(log.entries.size()):
+		var entry: Dictionary = log.entries[i]
+		test_assert.eq(
+			entry["sequence_id"],
+			i,
+			"event log sequence_id should equal entry index"
+		)
+		if i > 0:
+			var previous: Dictionary = log.entries[i - 1]
+			test_assert.check(
+				entry["sequence_id"] > previous["sequence_id"],
+				"event log sequence_id should strictly increase"
+			)

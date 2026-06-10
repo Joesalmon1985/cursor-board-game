@@ -55,3 +55,8 @@ static func run(test_assert: TestAssert) -> void:
 	var view := LegalActionView.new(state_a.action_space)
 	test_assert.eq(view.action_ids.size(), state_a.action_space.size(), "legal view should mirror action space size")
 	test_assert.eq(view.legal_mask.size(), state_a.action_space.size(), "legal view mask should mirror action space size")
+
+	var layout_a := ActionSpace.from_board(state_a.board).to_layout_key()
+	var layout_b := ActionSpace.from_board(state_a.board).to_layout_key()
+	test_assert.eq(layout_a, layout_b, "action space layout should be independent of RNG")
+
