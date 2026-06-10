@@ -1,7 +1,7 @@
 class_name GameSnapshot
 extends RefCounted
 
-static func snapshot(state: GameState, events: Array) -> Dictionary:
+static func snapshot(state: GameState, events: Array, event_log: EventLog = null) -> Dictionary:
 	var players_data: Array = []
 	for player in state.players:
 		var resources := {}
@@ -25,7 +25,7 @@ static func snapshot(state: GameState, events: Array) -> Dictionary:
 			"vertex": city.vertex.to_dict(),
 		})
 
-	return {
+	var result := {
 		"seed": state.seed,
 		"turn_number": state.turn_number,
 		"round_number": state.round_number,
@@ -34,3 +34,6 @@ static func snapshot(state: GameState, events: Array) -> Dictionary:
 		"cities": cities_data,
 		"events": events_data,
 	}
+	if event_log != null:
+		result["history"] = event_log.to_dict()
+	return result
