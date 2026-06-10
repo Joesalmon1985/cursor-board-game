@@ -16,6 +16,15 @@ static func add_player(state: GameState, display_name: String) -> Player:
 	return player
 
 
+static func grant_resources(state: GameState, player_id: int, amounts: Dictionary) -> void:
+	for player in state.players:
+		if player.id != player_id:
+			continue
+		for resource in amounts.keys():
+			player.resources[resource] = amounts[resource]
+		return
+
+
 static func place_city(state: GameState, player_id: int, vertex: VertexCoord) -> City:
 	if not _player_exists(state, player_id):
 		push_error("Player %d does not exist" % player_id)

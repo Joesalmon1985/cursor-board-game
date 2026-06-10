@@ -9,6 +9,7 @@ func _init() -> void:
 		TestDeterminism,
 		TestActionSpace,
 		TestTurnOrder,
+		TestLegalActions,
 	]
 	var test_assert := TestAssert.new()
 	for module in test_modules:
