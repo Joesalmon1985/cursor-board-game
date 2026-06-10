@@ -21,3 +21,11 @@ static func run(test_assert: TestAssert) -> void:
 	)
 
 	test_assert.check(controller.current_view()["step"] > 0, "step_forward should advance step index")
+
+	controller.load_from_result(result)
+	var replay_at_start := controller.current_view()
+	test_assert.eq(
+		replay_at_start["players"][0]["resources"].get("wood", -1),
+		4,
+		"controller should replay starting resources at step 0"
+	)

@@ -5,6 +5,7 @@ static func run(game_seed: int, rounds: int) -> Dictionary:
 	var state := ScenarioBuilder.build_bot_ready_game(game_seed)
 	var events: Array = []
 	var event_log := EventLog.new()
+	var replay_baseline := EventLogReplay.capture_baseline(state)
 
 	var start_events := GameStartRules.start_game(state)
 	for event in start_events:
@@ -19,5 +20,6 @@ static func run(game_seed: int, rounds: int) -> Dictionary:
 		"state": state,
 		"events": events,
 		"event_log": event_log,
+		"replay_baseline": replay_baseline,
 		"snapshot": GameSnapshot.snapshot(state, events, event_log),
 	}

@@ -2,6 +2,7 @@ extends Control
 
 var _controller := DebugGameController.new()
 var _auto_timer: Timer
+var _updating_slider := false
 
 
 @onready var _seed_input: LineEdit = $Panel/VBox/SeedRow/SeedInput
@@ -9,6 +10,7 @@ var _auto_timer: Timer
 @onready var _run_button: Button = $Panel/VBox/SeedRow/RunButton
 @onready var _step_button: Button = $Panel/VBox/Controls/StepButton
 @onready var _auto_button: Button = $Panel/VBox/Controls/AutoButton
+@onready var _step_slider: HSlider = $Panel/VBox/StepSlider
 @onready var _status_label: Label = $Panel/VBox/StatusLabel
 @onready var _players_label: Label = $Panel/VBox/PlayersLabel
 @onready var _events_label: RichTextLabel = $Panel/VBox/EventsLabel
@@ -24,6 +26,7 @@ func _ready() -> void:
 	_run_button.pressed.connect(_on_run_pressed)
 	_step_button.pressed.connect(_on_step_pressed)
 	_auto_button.pressed.connect(_on_auto_pressed)
+	_step_slider.value_changed.connect(_on_slider_changed)
 	_run_simulation()
 
 
@@ -54,6 +57,13 @@ func _on_auto_step() -> void:
 		_auto_button.text = "Auto-step"
 
 
+func _on_slider_changed(value: float) -> void:
+	if _updating_slider:
+		return
+	_controller.set_step(int(value))
+	_refresh_view()
+
+
 func _run_simulation() -> void:
 	var game_seed := int(_seed_input.text) if _seed_input.text.is_valid_int() else 42
 	var rounds := int(_rounds_input.text) if _rounds_input.text.is_valid_int() else 3
@@ -63,19 +73,40 @@ func _run_simulation() -> void:
 
 func _refresh_view() -> void:
 	var view := _controller.current_view()
-	_status_label.text = "Step %d / %d | Round %d | Active player %d" % [
+	var active_name := _active_player_name(view)
+	_status_label.text = "Step %d / %d | Round %d | Active: %s" % [
 		view["step"],
 		view["total_steps"],
 		view["round_number"],
-		view["active_player_index"],
+		active_name,
 	]
 	_players_label.text = _format_players(view["players"])
-	_events_label.text = view["events_text"]
+	_events_label.text = _format_events(view)
+
+	_updating_slider = true
+	_step_slider.min_value = 0
+	_step_slider.max_value = maxi(view["total_steps"], 0)
+	_step_slider.step = 1
+	_step_slider.value = view["step"]
+	_updating_slider = false
 
 	var result := _controller.get_result()
 	var state: GameState = result.get("state")
 	if state != null and _board_view.has_method("set_board_state"):
-		_board_view.set_board_state(state.board, view["board"])
+		_board_view.set_board_state(
+			state.board,
+			view["board"],
+			view["active_player_index"]
+		)
+
+
+func _active_player_name(view: Dictionary) -> String:
+	var players: Array = view.get("players", [])
+	var active_index: int = view.get("active_player_index", 0)
+	for player in players:
+		if player.get("id", -1) == active_index:
+			return player.get("name", "Player %d" % active_index)
+	return "Player %d" % active_index
 
 
 func _format_players(players: Array) -> String:
@@ -83,3 +114,10 @@ func _format_players(players: Array) -> String:
 	for player in players:
 		lines.append("%s: %s" % [player["name"], str(player["resources"])])
 	return "\n".join(lines)
+
+
+func _format_events(view: Dictionary) -> String:
+	var detail: String = view.get("last_event_detail", "")
+	if detail.is_empty():
+		return view.get("events_text", "")
+	return "%s\n\nLast: %s" % [view.get("events_text", ""), detail]

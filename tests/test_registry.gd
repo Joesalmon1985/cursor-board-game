@@ -22,6 +22,7 @@ static func all_modules() -> Array:
 		{"category": CATEGORY_INTEGRATION, "name": "TestBotPolicy", "module": TestBotPolicy},
 		{"category": CATEGORY_INTEGRATION, "name": "TestBotSimulation", "module": TestBotSimulation},
 		{"category": CATEGORY_INTEGRATION, "name": "TestEventLog", "module": TestEventLog},
+		{"category": CATEGORY_DEBUG, "name": "TestEventLogReplay", "module": TestEventLogReplay},
 		{"category": CATEGORY_ARCHITECTURE, "name": "TestArchitecture", "module": TestArchitecture},
 		{"category": CATEGORY_DEBUG, "name": "TestDebugController", "module": TestDebugController},
 	]
